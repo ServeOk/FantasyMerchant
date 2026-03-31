@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FantasyMerchant.Domain", "FantasyMerchant.Domain\FantasyMerchant.Domain.csproj", "{B2A95B2E-D33C-460A-B51F-1E2C39DA09DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FantasyMerchant.Tests", "FantasyMerchant.Tests\FantasyMerchant.Tests.csproj", "{C8A2E357-8F13-4A50-A6D6-2261B8BBC4B1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FantasyMerchant.Web", "FantasyMerchant.Web\FantasyMerchant.Web.csproj", "{53D7A058-DB89-44D0-90B6-D62D22AEB8CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FantasyMerchant.Infrastructure", "FantasyMerchant.Infrastructure\FantasyMerchant.Infrastructure.csproj", "{43390D78-08F4-491E-8139-396297EC7349}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FantasyMerchant.Application", "FantasyMerchant.Application\FantasyMerchant.Application.csproj", "{A93B7EDF-257A-4B37-ACCC-42F5CBCC233F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{FE74B6FD-EE16-48C4-B8DC-A46874C18A40}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2A95B2E-D33C-460A-B51F-1E2C39DA09DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A95B2E-D33C-460A-B51F-1E2C39DA09DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2A95B2E-D33C-460A-B51F-1E2C39DA09DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A95B2E-D33C-460A-B51F-1E2C39DA09DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A2E357-8F13-4A50-A6D6-2261B8BBC4B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A2E357-8F13-4A50-A6D6-2261B8BBC4B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A2E357-8F13-4A50-A6D6-2261B8BBC4B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A2E357-8F13-4A50-A6D6-2261B8BBC4B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53D7A058-DB89-44D0-90B6-D62D22AEB8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D7A058-DB89-44D0-90B6-D62D22AEB8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D7A058-DB89-44D0-90B6-D62D22AEB8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D7A058-DB89-44D0-90B6-D62D22AEB8CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43390D78-08F4-491E-8139-396297EC7349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43390D78-08F4-491E-8139-396297EC7349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43390D78-08F4-491E-8139-396297EC7349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43390D78-08F4-491E-8139-396297EC7349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93B7EDF-257A-4B37-ACCC-42F5CBCC233F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93B7EDF-257A-4B37-ACCC-42F5CBCC233F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93B7EDF-257A-4B37-ACCC-42F5CBCC233F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93B7EDF-257A-4B37-ACCC-42F5CBCC233F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27358C29-48BD-4D72-81AE-B8596B086EAE}
+	EndGlobalSection
+EndGlobal
