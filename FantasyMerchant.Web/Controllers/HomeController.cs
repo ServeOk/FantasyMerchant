@@ -1,32 +1,47 @@
-using FantasyMerchant.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using MediatR;
+using FantasyMerchant.Application.Features.FindRoute;
+using FantasyMerchant.Domain.Records;
+using FantasyMerchant.Web.ViewModels;
 
-namespace FantasyMerchant.Web.Controllers
+namespace FantasyMerchant.Web.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IMediator _mediator;
+
+    public HomeController(IMediator mediator)
     {
-        private readonly ILogger<HomeController> _logger;
+        _mediator = mediator;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> FindRoute(FindRouteViewModel model)
+    {
+        if (!ModelState.IsValid)
         {
-            _logger = logger;
+            return View("Index");
         }
 
-        public IActionResult Index()
+        var startCityId = new Id(Guid.Parse(model.StartCityId));
+        var endCityId = new Id(Guid.Parse(model.EndCityId));
+
+        var query = new FindRouteQuery(startCityId, endCityId, model.Strategy);
+
+        var result = await _mediator.Send(query);
+
+        if (!result.Success)
         {
-            return View();
+            ModelState.AddModelError("", result.ErrorMessage);
+            return View("Index");
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        return View("Index", result);
     }
 }

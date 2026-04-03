@@ -17,9 +17,3 @@ public class FindRouteQuery : IRequest<FindRouteResponse>
     }
 }
 
-public record FindRouteResponse(
-    List<Id> Path,
-    int TotalGold,
-    int TotalDanger,
-    int TotalSteps
-);

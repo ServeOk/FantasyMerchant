@@ -1,6 +1,11 @@
-using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using FantasyMerchant.Infrastructure.Persistence;
+using FantasyMerchant.Domain.Repositories;
+using FantasyMerchant.Domain.Services;
+using FantasyMerchant.Infrastructure.Repositories;
+using FantasyMerchant.Infrastructure.Services;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,15 +13,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(
-    Assembly.Load("FantasyMerchant.Application")));
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(FantasyMerchant.Application.Features.FindRoute.FindRouteHandler).Assembly));
 
 
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Services.AddScoped<IGraphRepository, JsonGraphRepository>();
+builder.Services.AddScoped<IRouteRepository, RouteRepository>();
+builder.Services.AddScoped<IRouteOptimizer, RouteOptimizer>();
 
+var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -26,13 +33,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id=int?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
