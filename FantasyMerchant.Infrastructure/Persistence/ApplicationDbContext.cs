@@ -9,6 +9,6 @@ public class ApplicationDbContext : DbContext
         : base(options) { }
 
   
-   // public DbSet<City> Cities => Set<City>();
+   //public DbSet<City> Cities => Set<City>();
     //public DbSet<Road> Roads => Set<Road>();
 }

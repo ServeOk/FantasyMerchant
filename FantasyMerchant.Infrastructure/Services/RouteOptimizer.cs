@@ -14,14 +14,12 @@ public class RouteOptimizer : IRouteOptimizer
         RouteStrategy strategy,
         CancellationToken ct = default)
     {
-        // Реализация алгоритма Дейкстры
         var distances = new Dictionary<Id, int>();
         var previous = new Dictionary<Id, Id?>();
         var unvisited = new HashSet<Id>();
         var totalGold = 0;
         var totalDanger = 0;
 
-        // Инициализация
         foreach (var city in graph.Keys)
         {
             distances[city] = int.MaxValue;
@@ -31,7 +29,6 @@ public class RouteOptimizer : IRouteOptimizer
 
         while (unvisited.Count > 0)
         {
-            // Находим город с минимальным расстоянием
             var current = unvisited.OrderBy(c => distances[c]).First();
 
             if (current == endCityId)
@@ -39,7 +36,6 @@ public class RouteOptimizer : IRouteOptimizer
 
             unvisited.Remove(current);
 
-            // Обновляем расстояния до соседей
             if (graph.TryGetValue(current, out var roads))
             {
                 foreach (var road in roads)
@@ -59,7 +55,6 @@ public class RouteOptimizer : IRouteOptimizer
             }
         }
 
-        // Восстанавливаем путь
         var path = new List<Id>();
         var currentCity = endCityId;
 
@@ -70,7 +65,6 @@ public class RouteOptimizer : IRouteOptimizer
         }
         path.Insert(0, startCityId);
 
-        // Считаем общую стоимость
         for (int i = 0; i < path.Count - 1; i++)
         {
             var from = path[i];

@@ -5,12 +5,11 @@ public class Event : IEntity
     public Id Id { get; set; }
     public Id RoadId { get; set; }
     public EventType Type { get; set; }
-    public decimal WeightModifier { get; set; } // ×2, ×5, и т.д.
+    public decimal WeightModifier { get; set; } 
     public DateTime? StartsAt { get; set; }
     public DateTime? EndsAt { get; set; }
     public bool IsActive { get; set; } = true;
 
-    // Навигационные свойства
     public virtual Road Road { get; set; } = null!;
 
     public static Event Create(Id roadId, EventType type, decimal weightModifier)

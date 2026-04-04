@@ -20,7 +20,7 @@ public class RouteRepository : IRouteRepository
         => Task.FromResult(_routes.FirstOrDefault(r => r.Id == id));
 
     public Task<List<Route>> GetRoutesByUserIdAsync(Id userId, CancellationToken ct = default)
-        => Task.FromResult(_routes.ToList()); // Упростите если нужно
+        => Task.FromResult(_routes.ToList()); 
 
     public Task<List<Route>> GetAllRoutesAsync(CancellationToken ct = default)
         => Task.FromResult(_routes.ToList());

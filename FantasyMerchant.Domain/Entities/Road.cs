@@ -50,9 +50,7 @@ public class Road : IEntity
     public void Block() => IsBlocked = true;
     public void Unblock() => IsBlocked = false;
 
-    /// <summary>
-    /// Расчёт итогового веса для выбранной стратегии оптимизации
-    /// </summary>
+ 
     public int GetEffectiveWeight(RouteStrategy strategy)
     {
         if (IsBlocked) return int.MaxValue;
