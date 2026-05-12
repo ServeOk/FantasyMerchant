@@ -1,6 +1,6 @@
 ﻿using FantasyMerchant.Domain.Records;
 
-namespace FantasyMerchant.Application.Features.FindRoute;
+namespace FantasyMerchant.Web.Models;
 
 public record FindRouteResponse(
     bool Success,

@@ -1,47 +1,95 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using FantasyMerchant.Application.Features.FindRoute;
+using FantasyMerchant.Application.Interfaces;
+using FantasyMerchant.Application.Services;
+using FantasyMerchant.Domain.Enums;
 using FantasyMerchant.Domain.Records;
-using FantasyMerchant.Web.ViewModels;
+using FantasyMerchant.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyMerchant.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IMediator _mediator;
+    private readonly IRouteOptimizer _routeOptimizer;
+    private readonly IGraphRepository _graphRepository;
 
-    public HomeController(IMediator mediator)
+    public HomeController(IRouteOptimizer routeOptimizer, IGraphRepository graphRepository)
     {
-        _mediator = mediator;
+        _routeOptimizer = routeOptimizer;
+        _graphRepository = graphRepository;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var cities = await _graphRepository.GetAllCitiesAsync();
+        var viewModel = new FindRouteViewModel
+        {
+            AvailableCities = cities.Select(c => new CityViewModel
+            {
+                Id = c.Id.Value.ToString(),
+                Name = c.Name
+            }).ToList()
+        };
+
+        return View(viewModel);
     }
 
     [HttpPost]
     public async Task<IActionResult> FindRoute(FindRouteViewModel model)
     {
+        var cities = await _graphRepository.GetAllCitiesAsync();
+        model.AvailableCities = cities.Select(c => new CityViewModel
+        {
+            Id = c.Id.Value.ToString(),
+            Name = c.Name
+        }).ToList();
+
         if (!ModelState.IsValid)
         {
-            return View("Index");
+            return View("Index", model);
         }
 
-        var startCityId = new Id(Guid.Parse(model.StartCityId));
-        var endCityId = new Id(Guid.Parse(model.EndCityId));
-
-        var query = new FindRouteQuery(startCityId, endCityId, model.Strategy);
-
-        var result = await _mediator.Send(query);
-
-        if (!result.Success)
+        try
         {
-            ModelState.AddModelError("", result.ErrorMessage);
-            return View("Index");
-        }
+            var startCityId = new Id(Guid.Parse(model.StartCityId));
+            var endCityId = new Id(Guid.Parse(model.EndCityId));
+            var strategy = model.Strategy.ToLower() switch
+            {
+                "merchant" => RouteStrategy.Merchant,
+                "rogue" => RouteStrategy.Rogue,
+                "balanced" => RouteStrategy.Balanced,
+                _ => RouteStrategy.Merchant
+            };
 
-        return View("Index", result);
+            var graph = await _graphRepository.GetGraphStructureAsync();
+
+            var (path, totalGold, totalDanger) = await _routeOptimizer.FindShortestPathAsync(
+                graph,
+                startCityId,
+                endCityId,
+                strategy
+            );
+
+            if (path.Count == 0)
+            {
+                ModelState.AddModelError("", "Маршрут не найден");
+                return View("Index", model);
+            }
+
+            var response = new FindRouteResponse(
+                Success: true,
+                Path: path,
+                TotalGold: totalGold,
+                TotalDanger: totalDanger,
+                TotalSteps: path.Count
+            );
+
+            return View("Index", response);
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Ошибка: {ex.Message}");
+            return View("Index", model);
+        }
     }
 }

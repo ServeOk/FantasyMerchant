@@ -1,6 +1,6 @@
 ﻿using FantasyMerchant.Domain.Entities;
-using FantasyMerchant.Domain.Repositories;
 using FantasyMerchant.Domain.Records;
+using FantasyMerchant.Application.Interfaces;
 
 namespace FantasyMerchant.Tests.Fakes;
 
@@ -98,31 +98,91 @@ public class FakeGraphRepository : IGraphRepository
         return Task.FromResult(evt);
     }
 
-   
+
     public void SeedTestData()
     {
-        
-        var city1 = City.Create("Цитадель", 400, 300);
-        city1.Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000001"));
+        var city1 = new City
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000001")),
+            Name = "Цитадель",
+            X = 400,
+            Y = 300,
+            Description = "Главный торговый центр"
+        };
 
-        var city2 = City.Create("Северный Дозор", 400, 100);
-        city2.Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000002"));
+        var city2 = new City
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000002")),
+            Name = "Северный Дозор",
+            X = 400,
+            Y = 100,
+            Description = "Военный пост"
+        };
 
-        var city3 = City.Create("Восточный Порт", 600, 300);
-        city3.Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000003"));
+        var city3 = new City
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000003")),
+            Name = "Восточный Порт",
+            X = 600,
+            Y = 300,
+            Description = "Морской порт"
+        };
 
-        _cities.AddRange(new[] { city1, city2, city3 });
+        var city4 = new City
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000004")),
+            Name = "Южная Гавань",
+            X = 400,
+            Y = 500,
+            Description = "Рыбацкая деревня"
+        };
 
-        
-        var road1 = Road.Create(city1.Id, city2.Id, 10, 5);
-        road1.Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000004"));
+        _cities.AddRange(new[] { city1, city2, city3, city4 });
 
-        var road2 = Road.Create(city1.Id, city3.Id, 15, 2);
-        road2.Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000005"));
+        var road1 = new Road
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000005")),
+            FromCityId = city1.Id,
+            ToCityId = city2.Id,
+            GoldCost = 10,
+            DangerLevel = 5,
+            LoadMultiplier = 1.0m,
+            IsBlocked = false
+        };
 
-        var road3 = Road.Create(city2.Id, city3.Id, 5, 8);
-        road3.Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000006"));
+        var road2 = new Road
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000006")),
+            FromCityId = city1.Id,
+            ToCityId = city3.Id,
+            GoldCost = 15,
+            DangerLevel = 2,
+            LoadMultiplier = 1.0m,
+            IsBlocked = false
+        };
 
-        _roads.AddRange(new[] { road1, road2, road3 });
+        var road3 = new Road
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000007")),
+            FromCityId = city2.Id,
+            ToCityId = city3.Id,
+            GoldCost = 5,
+            DangerLevel = 8,
+            LoadMultiplier = 1.0m,
+            IsBlocked = false
+        };
+
+        var road4 = new Road
+        {
+            Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000008")),
+            FromCityId = city1.Id,
+            ToCityId = city4.Id,
+            GoldCost = 8,
+            DangerLevel = 3,
+            LoadMultiplier = 1.0m,
+            IsBlocked = false
+        };
+
+        _roads.AddRange(new[] { road1, road2, road3, road4 });
     }
 }

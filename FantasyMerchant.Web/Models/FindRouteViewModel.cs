@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FantasyMerchant.Web.ViewModels;
+namespace FantasyMerchant.Web.Models;
 
 public class FindRouteViewModel
 {
@@ -15,4 +15,5 @@ public class FindRouteViewModel
     [Required(ErrorMessage = "Стратегия обязательна")]
     [Display(Name = "Стратегия оптимизации")]
     public string Strategy { get; set; } = "merchant";
+    public List<CityViewModel>? AvailableCities { get; set; }
 }

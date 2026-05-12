@@ -1,13 +1,12 @@
 ﻿using FantasyMerchant.Domain.Entities;
 using FantasyMerchant.Domain.Enums;
 using FantasyMerchant.Domain.Records;
-using FantasyMerchant.Domain.Services;
 
-namespace FantasyMerchant.Infrastructure.Services;
+namespace FantasyMerchant.Application.Services;
 
 public class RouteOptimizer : IRouteOptimizer
 {
-    public Task<(List<Id> path, int totalGold, int totalDanger)> FindShortestPathAsync(
+    public async Task<(List<Id> path, int totalGold, int totalDanger)> FindShortestPathAsync(
         Dictionary<Id, List<Road>> graph,
         Id startCityId,
         Id endCityId,
@@ -16,20 +15,21 @@ public class RouteOptimizer : IRouteOptimizer
     {
         var distances = new Dictionary<Id, int>();
         var previous = new Dictionary<Id, Id?>();
-        var unvisited = new HashSet<Id>();
-        var totalGold = 0;
-        var totalDanger = 0;
+        var unvisited = new HashSet<Id>(graph.Keys);
 
-        foreach (var city in graph.Keys)
+        foreach (var cityId in graph.Keys)
         {
-            distances[city] = int.MaxValue;
-            unvisited.Add(city);
+            distances[cityId] = int.MaxValue;
+            previous[cityId] = null;
         }
         distances[startCityId] = 0;
 
         while (unvisited.Count > 0)
         {
-            var current = unvisited.OrderBy(c => distances[c]).First();
+            var current = unvisited.OrderBy(c => distances[c]).FirstOrDefault();
+
+            if (current == null || distances[current] == int.MaxValue)
+                break;
 
             if (current == endCityId)
                 break;
@@ -43,7 +43,7 @@ public class RouteOptimizer : IRouteOptimizer
                     if (!unvisited.Contains(road.ToCityId))
                         continue;
 
-                    var weight = road.GetEffectiveWeight(strategy);
+                    var weight = CalculateRoadWeight(road, strategy);
                     var altDistance = distances[current] + weight;
 
                     if (altDistance < distances[road.ToCityId])
@@ -63,7 +63,16 @@ public class RouteOptimizer : IRouteOptimizer
             path.Insert(0, currentCity);
             currentCity = previous.TryGetValue(currentCity, out var prev) ? prev : null;
         }
+
+        if (path.Count == 0 && startCityId != endCityId)
+        {
+            return (new List<Id>(), 0, 0);
+        }
+
         path.Insert(0, startCityId);
+
+        var totalGold = 0;
+        var totalDanger = 0;
 
         for (int i = 0; i < path.Count - 1; i++)
         {
@@ -81,6 +90,19 @@ public class RouteOptimizer : IRouteOptimizer
             }
         }
 
-        return Task.FromResult((path, totalGold, totalDanger));
+        return (path, totalGold, totalDanger);
+    }
+
+    private static int CalculateRoadWeight(Road road, RouteStrategy strategy)
+    {
+        if (road.IsBlocked) return int.MaxValue;
+
+        return strategy switch
+        {
+            RouteStrategy.Merchant => (int)(road.GoldCost * road.LoadMultiplier),
+            RouteStrategy.Rogue => (int)(road.DangerLevel * road.LoadMultiplier),
+            RouteStrategy.Balanced => (int)((road.GoldCost + road.DangerLevel) * road.LoadMultiplier),
+            _ => (int)(road.GoldCost * road.LoadMultiplier)
+        };
     }
 }

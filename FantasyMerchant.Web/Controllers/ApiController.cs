@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FantasyMerchant.Domain.Repositories;
+using FantasyMerchant.Application.Interfaces;
 
 namespace FantasyMerchant.Web.Controllers;
 

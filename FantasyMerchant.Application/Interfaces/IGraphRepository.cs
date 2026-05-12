@@ -1,7 +1,7 @@
 ﻿using FantasyMerchant.Domain.Entities;
 using FantasyMerchant.Domain.Records;
 
-namespace FantasyMerchant.Domain.Repositories;
+namespace FantasyMerchant.Application.Interfaces;
 
 public interface IGraphRepository
 {

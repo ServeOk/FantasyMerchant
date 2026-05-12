@@ -1,5 +1,5 @@
 ﻿using FantasyMerchant.Domain.Entities;
-using FantasyMerchant.Domain.Repositories;
+using FantasyMerchant.Application.Interfaces;
 using FantasyMerchant.Domain.Records;
 
 namespace FantasyMerchant.Infrastructure.Repositories;
