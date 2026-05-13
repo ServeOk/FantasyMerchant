@@ -1,20 +1,18 @@
-﻿@model FantasyMerchant.Application.Features.FindRoute.FindRouteResponse
+﻿@model dynamic
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fantasy Merchant - Оптимизатор маршрутов</title>
+    <title>Fantasy Merchant</title>
     <style>
         body { font-family: Arial; margin: 20px; background: #f5f5f5; }
         .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; }
-        h1 { color: #2c3e50; }
         .form-group { margin: 15px 0; }
-        label { display: inline-block; width: 200px; font-weight: bold; color: #34495e; }
-        input, select { padding: 8px 12px; border: 1px solid #bdc3c7; border-radius: 4px; width: 300px; }
-        button { padding: 12px 24px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background: #229954; }
-        .error { color: #e74c3c; margin: 10px 0; padding: 10px; background: #fadbd8; border-radius: 4px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select { padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; width: 100%; }
+        button { padding: 12px 24px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
         .result { background: #d5f5e3; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .error { background: #fadbd8; padding: 20px; border-radius: 5px; margin: 20px 0; color: #721c24; }
     </style>
 </head>
 <body>
@@ -22,62 +20,80 @@
         <h1>🏰 Fantasy Merchant</h1>
         <h2>Оптимизатор торговых маршрутов</h2>
 
-        @if (!ViewData.ModelState.IsValid)
+        @* Проверка: если это ViewModel (форма) *@
+        @if (Model is FantasyMerchant.Web.Models.FindRouteViewModel viewModel)
         {
-                <div class="error">
-                @foreach (var modelState in ViewData.ModelState.Values)
-                {
-                    foreach (var error in modelState.Errors)
-                    {
-                                    <div>@error.ErrorMessage</div>
-                    }
-                }
-                </div>
+                <form asp-action="FindRoute" method="post">
+                    <div class="form-group">
+                        <label for="StartCityId"> Город старта:</label>
+                        <select id="StartCityId" name="StartCityId" required>
+                            <option value="">-- Выберите город --</option>
+                        @if (viewModel.AvailableCities != null)
+                        {
+                            @foreach (var city in viewModel.AvailableCities)
+                            {
+                                            <option value="@city.Id">@city.Name</option>
+                            }
+                        }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="EndCityId">🏁 Город назначения:</label>
+                        <select id="EndCityId" name="EndCityId" required>
+                            <option value="">-- Выберите город --</option>
+                        @if (viewModel.AvailableCities != null)
+                        {
+                            @foreach (var city in viewModel.AvailableCities)
+                            {
+                                            <option value="@city.Id">@city.Name</option>
+                            }
+                        }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Strategy">⚙️ Стратегия:</label>
+                        <select id="Strategy" name="Strategy">
+                            <option value="merchant">💰 Торговец (дешевле)</option>
+                            <option value="rogue">⚔️ Вор (безопаснее)</option>
+                            <option value="balanced">⚖️ Баланс</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">🗺️ Найти оптимальный маршрут</button>
+                </form>
         }
 
-        <form asp-action="FindRoute" method="post">
-            <div class="form-group">
-                <label for="StartCityId">Город старта (ID):</label>
-                <input type="text" id="StartCityId" name="StartCityId" 
-                       placeholder="Например: 00000000-0000-0000-0000-000000000001" 
-                       required />
-            </div>
-
-            <div class="form-group">
-                <label for="EndCityId">Город назначения (ID):</label>
-                <input type="text" id="EndCityId" name="EndCityId" 
-                       placeholder="Например: 00000000-0000-0000-0000-000000000003" 
-                       required />
-            </div>
-
-            <div class="form-group">
-                <label for="Strategy">Стратегия:</label>
-                <select id="Strategy" name="Strategy">
-                    <option value="merchant">💰 Торговец (дешевле)</option>
-                    <option value="rogue">⚔️ Вор (безопаснее)</option>
-                    <option value="balanced">⚖️ Баланс</option>
-                </select>
-            </div>
-
-            <button type="submit">🗺️ Найти маршрут</button>
-        </form>
-
-        @if (Model != null && Model.Success)
+        @* Проверка: если это Response (результат) *@
+        @if (Model is FantasyMerchant.Web.Models.FindRouteResponse response)
         {
-                <div class="result">
-                    <h3>✅ Маршрут найден!</h3>
-                    <p><strong>💰 Всего золота:</strong> @Model.TotalGold</p>
-                    <p><strong>⚔️ Всего опасности:</strong> @Model.TotalDanger</p>
-                    <p><strong>📍 Шагов:</strong> @Model.TotalSteps</p>
+            if (response.Success)
+            {
+                        <div class="result">
+                            <h3>✅ Маршрут найден!</h3>
+                            <p><strong>💰 Золото:</strong> @response.TotalGold</p>
+                            <p><strong>⚔️ Опасность:</strong> @response.TotalDanger</p>
+                            <p><strong>📍 Шагов:</strong> @response.TotalSteps</p>
 
-                    <h4>Последовательность городов:</h4>
-                    <ol>
-                    @foreach (var cityId in Model.Path)
-                    {
-                                <li>ID: @cityId.Value</li>
-                    }
-                    </ol>
-                </div>
+                            <h4>Последовательность городов:</h4>
+                            <ol>
+                        @foreach (var cityId in response.Path)
+                        {
+                                        <li>ID: @cityId.Value</li>
+                        }
+                            </ol>
+                        </div>
+            }
+            else
+            {
+                        <div class="error">
+                            <h3>❌ Ошибка</h3>
+                            <p>@response.ErrorMessage</p>
+                        </div>
+            }
+
+                <a href="/" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px;">← Найти другой маршрут</a>
         }
     </div>
 </body>
