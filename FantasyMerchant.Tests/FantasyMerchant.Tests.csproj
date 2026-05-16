@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FantasyMerchant.Application\FantasyMerchant.Application.csproj" />
     <ProjectReference Include="..\FantasyMerchant.Domain\FantasyMerchant.Domain.csproj" />
+    <ProjectReference Include="..\FantasyMerchant.Web\FantasyMerchant.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

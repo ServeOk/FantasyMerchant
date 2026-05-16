@@ -53,6 +53,20 @@ public class HomeController : Controller
         {
             var startCityId = new Id(Guid.Parse(model.StartCityId));
             var endCityId = new Id(Guid.Parse(model.EndCityId));
+
+            if (startCityId == endCityId)
+            {
+                var errorResponse = new FindRouteResponse(
+                    Success: false,
+                    Path: new List<Id>(),
+                    TotalGold: 0,
+                    TotalDanger: 0,
+                    TotalSteps: 0,
+                    ErrorMessage: "√ород старта и назначени€ должны быть разными"
+                );
+                return View("Index", errorResponse);
+            }
+
             var strategy = model.Strategy.ToLower() switch
             {
                 "merchant" => RouteStrategy.Merchant,
@@ -67,7 +81,8 @@ public class HomeController : Controller
                 graph,
                 startCityId,
                 endCityId,
-                strategy
+                strategy,
+                CancellationToken.None
             );
 
             if (path.Count == 0)

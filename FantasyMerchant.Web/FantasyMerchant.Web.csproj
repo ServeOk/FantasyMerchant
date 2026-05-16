@@ -20,4 +20,8 @@
     <ProjectReference Include="..\FantasyMerchant.Infrastructure\FantasyMerchant.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

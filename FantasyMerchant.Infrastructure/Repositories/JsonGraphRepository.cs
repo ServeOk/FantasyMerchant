@@ -67,93 +67,102 @@ public class JsonGraphRepository : IGraphRepository
 
     private void InitializeTestData()
     {
-        // ✅ Создаём города напрямую
-        var city1 = new City
+        var cities = new[]
+        {
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000001")),
             Name = "Цитадель",
             X = 400,
             Y = 300,
             Description = "Главный торговый центр"
-        };
-
-        var city2 = new City
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000002")),
             Name = "Северный Дозор",
             X = 400,
             Y = 100,
             Description = "Военный пост"
-        };
-
-        var city3 = new City
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000003")),
             Name = "Восточный Порт",
             X = 600,
             Y = 300,
             Description = "Морской порт"
-        };
-
-        var city4 = new City
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000004")),
             Name = "Южная Гавань",
             X = 400,
             Y = 500,
             Description = "Рыбацкая деревня"
-        };
-
-        _cities.AddRange(new[] { city1, city2, city3, city4 });
-
-        // ✅ Создаём дороги напрямую
-        var road1 = new Road
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000005")),
-            FromCityId = city1.Id,
-            ToCityId = city2.Id,
-            GoldCost = 10,
-            DangerLevel = 5,
-            LoadMultiplier = 1.0m,
-            IsBlocked = false
-        };
-
-        var road2 = new Road
+            Name = "Западный Форт",
+            X = 200,
+            Y = 300,
+            Description = "Пограничная крепость"
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000006")),
-            FromCityId = city1.Id,
-            ToCityId = city3.Id,
-            GoldCost = 15,
-            DangerLevel = 2,
-            LoadMultiplier = 1.0m,
-            IsBlocked = false
-        };
-
-        var road3 = new Road
+            Name = "Горная Твердыня",
+            X = 300,
+            Y = 150,
+            Description = "Шахтёрский город"
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000007")),
-            FromCityId = city2.Id,
-            ToCityId = city3.Id,
-            GoldCost = 5,
-            DangerLevel = 8,
-            LoadMultiplier = 1.0m,
-            IsBlocked = false
-        };
-
-        var road4 = new Road
+            Name = "Лесная Чаща",
+            X = 550,
+            Y = 200,
+            Description = "Эльфийское поселение"
+        },
+        new City
         {
             Id = new Id(Guid.Parse("00000000-0000-0000-0000-000000000008")),
-            FromCityId = city1.Id,
-            ToCityId = city4.Id,
-            GoldCost = 8,
-            DangerLevel = 3,
-            LoadMultiplier = 1.0m,
-            IsBlocked = false
-        };
+            Name = "Пустошь",
+            X = 500,
+            Y = 450,
+            Description = "Заброшенные земли"
+        }
+    };
 
-        _roads.AddRange(new[] { road1, road2, road3, road4 });
+        _cities.AddRange(cities);
 
-        SaveData();
+        var roads = new[]
+        {
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000001")), FromCityId = cities[0].Id, ToCityId = cities[1].Id, GoldCost = 10, DangerLevel = 5, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000002")), FromCityId = cities[0].Id, ToCityId = cities[2].Id, GoldCost = 15, DangerLevel = 2, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000003")), FromCityId = cities[0].Id, ToCityId = cities[3].Id, GoldCost = 8, DangerLevel = 3, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000004")), FromCityId = cities[0].Id, ToCityId = cities[4].Id, GoldCost = 12, DangerLevel = 4, LoadMultiplier = 1.0m, IsBlocked = false },
+        
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000005")), FromCityId = cities[1].Id, ToCityId = cities[2].Id, GoldCost = 5, DangerLevel = 8, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000006")), FromCityId = cities[1].Id, ToCityId = cities[5].Id, GoldCost = 7, DangerLevel = 3, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000007")), FromCityId = cities[1].Id, ToCityId = cities[6].Id, GoldCost = 20, DangerLevel = 6, LoadMultiplier = 1.0m, IsBlocked = false },
+        
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000008")), FromCityId = cities[2].Id, ToCityId = cities[6].Id, GoldCost = 6, DangerLevel = 2, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000009")), FromCityId = cities[2].Id, ToCityId = cities[7].Id, GoldCost = 18, DangerLevel = 7, LoadMultiplier = 1.0m, IsBlocked = false },
+        
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000010")), FromCityId = cities[3].Id, ToCityId = cities[7].Id, GoldCost = 9, DangerLevel = 4, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000011")), FromCityId = cities[3].Id, ToCityId = cities[4].Id, GoldCost = 11, DangerLevel = 5, LoadMultiplier = 1.0m, IsBlocked = false },
+        
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000012")), FromCityId = cities[4].Id, ToCityId = cities[5].Id, GoldCost = 14, DangerLevel = 6, LoadMultiplier = 1.0m, IsBlocked = false },
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000013")), FromCityId = cities[4].Id, ToCityId = cities[3].Id, GoldCost = 13, DangerLevel = 4, LoadMultiplier = 1.0m, IsBlocked = false },
+        
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000014")), FromCityId = cities[5].Id, ToCityId = cities[6].Id, GoldCost = 16, DangerLevel = 9, LoadMultiplier = 1.0m, IsBlocked = true }, // Заблокирована!
+        
+        new Road { Id = new Id(Guid.Parse("10000000-0000-0000-0000-000000000015")), FromCityId = cities[6].Id, ToCityId = cities[7].Id, GoldCost = 8, DangerLevel = 3, LoadMultiplier = 1.0m, IsBlocked = false }
+    };
+
+        _roads.AddRange(roads);
     }
 
 
